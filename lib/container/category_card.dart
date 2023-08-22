@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ssaksuri/screen/paid_garbage_request_screen.dart';
+import 'package:ssaksuri/utils/data_utils.dart';
 
 import '../component/category_info.dart';
 import '../component/main_card.dart';
@@ -6,9 +8,11 @@ import '../const/colors.dart';
 
 class CategoryCard extends StatelessWidget {
   final String category;
+  final bool isTop;
 
-  const CategoryCard({
+  CategoryCard({
     required this.category,
+    required this.isTop,
     super.key,
   });
 
@@ -18,11 +22,12 @@ class CategoryCard extends StatelessWidget {
       height: 160,
       child: MainCard(
         backgroundColor: lightColor,
-        isTop: true, // 맨 위에 녀석만 둥근 테두리
+        isTop: isTop, // 맨 위에 녀석만 둥근 테두리
         child: LayoutBuilder(builder: (context, constraint) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // 카테고리명 (ex) 가구류, 대형 전자제품류, 소형 전자제품류, 생활용품류
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 20),
                 child: Text(
@@ -35,18 +40,31 @@ class CategoryCard extends StatelessWidget {
                 ),
               ),
               Expanded(
+                // 물건 image와 label
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   physics: PageScrollPhysics(),
-                  children:
-                  List.generate(
-                    6,
-                    (index) => CategoryInfo(
-                      imgPath: 'assets/img/ok.png',
-                      category: '$category $index',
-                      width: constraint.maxWidth / 3,
-                    ),
-                  ),
+                  children: DataUtils.getItemListfromCategory(category: category)
+                      .map(
+                        (e) => GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => PaidGarbageRequestScreen(
+                                  category: category,
+                                  item_label: e,
+                                ),
+                              ),
+                            );
+                          },
+                          child: CategoryInfo(
+                            imgPath: 'assets/img/${DataUtils.getENGfromKOR(word: e)}.png',
+                            itemLabel: e,
+                            width: constraint.maxWidth / 3,
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],
