@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ssaksuri/screen/paid_garbage_request_screen.dart';
+import 'package:ssaksuri/utils/data_utils.dart';
 
 import '../component/category_info.dart';
 import '../component/main_card.dart';
 import '../const/colors.dart';
+import '../const/item_category_list.dart';
 
 class CategoryCard extends StatelessWidget {
   final String category;
 
-  const CategoryCard({
+  CategoryCard({
     required this.category,
     super.key,
   });
@@ -38,15 +41,35 @@ class CategoryCard extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   physics: PageScrollPhysics(),
-                  children:
-                  List.generate(
-                    6,
-                    (index) => CategoryInfo(
-                      imgPath: 'assets/img/ok.png',
-                      category: '$category $index',
-                      width: constraint.maxWidth / 3,
-                    ),
-                  ),
+                  children: item_category_gagu
+                      .map(
+                        (e) => GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => PaidGarbageRequestScreen(
+                                  category: category,
+                                  categoryDetail: e,
+                                ),
+                              ),
+                            );
+                          },
+                          child: CategoryInfo(
+                            imgPath: 'assets/img/${DataUtils.getENGfromKOR(word: e)}.png',
+                            category: e,
+                            width: constraint.maxWidth / 3,
+                          ),
+                        ),
+                      )
+                      .toList(),
+
+                  // List.generate(
+                  //   6,
+                  //   (index) => CategoryInfo(
+                  //     imgPath: 'assets/img/ok.png',
+                  //     category: '$category $index',
+                  //     width: constraint.maxWidth / 3,
+                  //   ),
                 ),
               ),
             ],

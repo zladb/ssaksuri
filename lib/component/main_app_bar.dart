@@ -14,7 +14,7 @@ class MainAppBar extends StatelessWidget {
       // pinned: true,
       // title: isExpanded ? null : Text('$region ${DataUtils.getTimeFromDateTime(dateTime: dateTime)}'),
       centerTitle: true,
-      expandedHeight: 270,
+      expandedHeight: 315,
       flexibleSpace: FlexibleSpaceBar(
         background: SafeArea(
           child: Padding(
@@ -26,7 +26,6 @@ class MainAppBar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-
                     mainText,
                     style: TextStyle(
                       // fontFamily: PyeongChangPeace,
@@ -53,6 +52,7 @@ class MainAppBar extends StatelessWidget {
                   //   status.imagePath,
                   //   height: MediaQuery.of(context).size.width / 2,
                   // ),
+                  Image.asset('assets/img/cute_bear_cutting.png')
                 ],
               ),
             ),
