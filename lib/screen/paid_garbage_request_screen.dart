@@ -3,11 +3,11 @@ import 'package:ssaksuri/const/colors.dart';
 
 class PaidGarbageRequestScreen extends StatelessWidget {
   final String category;
-  final String categoryDetail;
+  final String item_label;
 
   const PaidGarbageRequestScreen({
     required this.category,
-    required this.categoryDetail,
+    required this.item_label,
     super.key,
   });
 
@@ -21,7 +21,7 @@ class PaidGarbageRequestScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text('$categoryDetail 하이하이~'),
+        child: Text('$item_label 하이하이~'),
       ),
     );
   }

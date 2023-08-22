@@ -12,7 +12,6 @@ class MainAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: darkColor,
       // pinned: true,
-      // title: isExpanded ? null : Text('$region ${DataUtils.getTimeFromDateTime(dateTime: dateTime)}'),
       centerTitle: true,
       expandedHeight: 315,
       flexibleSpace: FlexibleSpaceBar(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ssaksuri/const/colors.dart';
 
 import '../component/main_app_bar.dart';
-import '../component/main_card.dart';
 import '../container/category_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -27,25 +26,17 @@ class HomeScreen extends StatelessWidget {
                   isTop: true,
                 ),
                 CategoryCard(
-                  category: '전자제품류',
+                  category: '대형 전자제품류',
                   isTop: false,
                 ),
-                SizedBox(
-                  height: 150,
-                  child: MainCard(
-                    backgroundColor: Colors.white,
-                    child: Container(),
-                    isTop: false,
-                  ),
+                CategoryCard(
+                  category: '소형 전자제품류',
+                  isTop: false,
                 ),
-                SizedBox(
-                  height: 150,
-                  child: MainCard(
-                    backgroundColor: Colors.white,
-                    child: Container(),
-                    isTop: false,
-                  ),
-                )
+                CategoryCard(
+                  category: '생활용품류',
+                  isTop: false,
+                ),
               ],
             ),
           ),

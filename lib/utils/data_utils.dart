@@ -3,6 +3,9 @@ import '../const/item_category_list.dart';
 class DataUtils {
   static String getENGfromKOR({required String word}) {
     switch (word) {
+      case '기타':
+        return 'etc';
+
       // 가구류
       case '침대':
         return 'bed';
@@ -17,7 +20,7 @@ class DataUtils {
       case '옷장':
         return 'wardrobe';
 
-      // 전자제품류
+      // 대형 전자제품류
       case '컴퓨터':
         return 'computer';
       case '냉장고':
@@ -31,19 +34,55 @@ class DataUtils {
       case '전자레인지':
         return 'microwave';
 
+      // 소형 전자제품류
+      case '선풍기':
+        return 'fan';
+      case '전기포트':
+        return 'kettle';
+      case '밥솥':
+        return 'rice-cooker';
+      case '청소기':
+        return 'vacuum';
+      case '에어프라이어':
+        return 'air-fryer';
+      case '믹서기':
+        return 'blender';
+      case '공기청정기':
+        return 'air-purifier';
+
+      // 생활용품류
+      case '자전거':
+        return 'bycicle';
+      case '헬스용품':
+        return 'barbell';
+      case '거울':
+        return 'mirror';
+      case '시계':
+        return 'clock';
+      case '이불':
+        return 'blanket';
+      case '후라이팬':
+        return 'frying-pan';
+
       default:
         return 'null';
     }
   }
 
-  static List<String> getListfromCategory({required String category}) {
+  static List<String> getItemListfromCategory({required String category}) {
     switch (category) {
       // 가구류
       case '가구류':
-        return item_category_gagu;
+        return item_labels_gagu;
 
-      case '전자제품류':
-        return item_category_electric;
+      case '대형 전자제품류':
+        return item_labels_big_electric;
+
+      case '소형 전자제품류':
+        return item_labels_small_electric;
+
+      case '생활용품류':
+        return item_labels_dairy;
 
       default:
         return ['null'];
