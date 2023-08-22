@@ -9,9 +9,11 @@ import '../const/item_category_list.dart';
 
 class CategoryCard extends StatelessWidget {
   final String category;
+  final bool isTop;
 
   CategoryCard({
     required this.category,
+    required this.isTop,
     super.key,
   });
 
@@ -41,7 +43,7 @@ class CategoryCard extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   physics: PageScrollPhysics(),
-                  children: item_category_gagu
+                  children: DataUtils.getListfromCategory(category: category)
                       .map(
                         (e) => GestureDetector(
                           onTap: () {

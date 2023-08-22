@@ -22,14 +22,13 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CategoryCard(category: '가구류',),
-                SizedBox(
-                  height: 150,
-                  child: MainCard(
-                    backgroundColor: Colors.white,
-                    child: Container(),
-                    isTop: false,
-                  ),
+                CategoryCard(
+                  category: '가구류',
+                  isTop: true,
+                ),
+                CategoryCard(
+                  category: '전자제품류',
+                  isTop: false,
                 ),
                 SizedBox(
                   height: 150,
