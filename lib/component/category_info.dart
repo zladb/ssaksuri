@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-class CategoryInfo extends StatelessWidget {
+class ItemInfo extends StatelessWidget {
   // 카테고리 이름
   final String itemLabel;
   // 아이콘 위치 (경로)
@@ -9,7 +9,7 @@ class CategoryInfo extends StatelessWidget {
   // 너비
   final double width;
 
-  const CategoryInfo({
+  const ItemInfo({
     required this.itemLabel,
     required this.imgPath,
     required this.width,

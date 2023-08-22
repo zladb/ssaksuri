@@ -4,6 +4,7 @@ import 'package:ssaksuri/utils/data_utils.dart';
 
 import '../component/category_info.dart';
 import '../component/main_card.dart';
+import '../component/request_bottom_sheet.dart';
 import '../const/colors.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -48,16 +49,23 @@ class CategoryCard extends StatelessWidget {
                       .map(
                         (e) => GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => PaidGarbageRequestScreen(
-                                  category: category,
-                                  item_label: e,
-                                ),
-                              ),
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true, // bottom sheet의 높이를 화면의 반보다 더 높에 하고 싶을 때 설정.
+                              builder: (_) {
+                                return RequestBottomSheet();
+                              },
                             );
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (_) => PaidGarbageRequestScreen(
+                            //       category: category,
+                            //       item_label: e,
+                            //     ),
+                            //   ),
+                            // );
                           },
-                          child: CategoryInfo(
+                          child: ItemInfo(
                             imgPath: 'assets/img/${DataUtils.getENGfromKOR(word: e)}.png',
                             itemLabel: e,
                             width: constraint.maxWidth / 3,
