@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ssaksuri/screen/paid_garbage_request_screen.dart';
 import 'package:ssaksuri/utils/data_utils.dart';
 
 import '../component/category_info.dart';
@@ -45,34 +44,45 @@ class CategoryCard extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   physics: PageScrollPhysics(),
-                  children: DataUtils.getItemListfromCategory(category: category)
-                      .map(
-                        (e) => GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true, // bottom sheet의 높이를 화면의 반보다 더 높에 하고 싶을 때 설정.
-                              builder: (_) {
-                                return RequestBottomSheet();
+                  children:
+                      DataUtils.getItemListfromCategory(category: category)
+                          .map(
+                            (e) => GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  isScrollControlled:
+                                      true, // bottom sheet의 높이를 화면의 반보다 더 높에 하고 싶을 때 설정.
+                                  builder: (_) {
+                                    // return RequestBottomSheet();
+                                    return RequestBottomSheet(
+                                      category: category,
+                                      item_label: e,
+                                    );
+                                  },
+                                );
+                                // Navigator.of(context).push(
+                                //   MaterialPageRoute(
+                                //     builder: (_) => PaidGarbageRequestScreen(
+                                //       category: category,
+                                //       item_label: e,
+                                //     ),
+                                //   ),
+                                // );
                               },
-                            );
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (_) => PaidGarbageRequestScreen(
-                            //       category: category,
-                            //       item_label: e,
-                            //     ),
-                            //   ),
-                            // );
-                          },
-                          child: ItemInfo(
-                            imgPath: 'assets/img/${DataUtils.getENGfromKOR(word: e)}.png',
-                            itemLabel: e,
-                            width: constraint.maxWidth / 3,
-                          ),
-                        ),
-                      )
-                      .toList(),
+                              child: ItemInfo(
+                                imgPath:
+                                    'assets/img/${DataUtils.getENGfromKOR(word: e)}.png',
+                                itemLabel: e,
+                                width: constraint.maxWidth / 3,
+                              ),
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
             ],

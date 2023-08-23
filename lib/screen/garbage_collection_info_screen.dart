@@ -6,6 +6,7 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Center(
         child: Text('쓰레기 수거 정보 스크린'),
       ),
