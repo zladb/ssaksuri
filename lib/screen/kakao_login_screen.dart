@@ -21,7 +21,10 @@ class KakaoLoginScreen extends StatelessWidget {
           await Hive.openBox('info');
           final box = Hive.box('info');
           box.put('id', user.id);
-          box.put('nickname', user.kakaoAccount?.profile?.nickname);
+          box.put('nickname', user.kakaoAccount!.profile!.nickname);
+          box.put('mileage', 0);
+          print('keys : ${box.keys.toList()}');
+          print('values : ${box.values.toList()}');
         }
       },
     );

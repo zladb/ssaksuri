@@ -39,12 +39,14 @@ class ItemModel {
   @override
   String toString() {
     // TODO: implement toString
-    return '''category : ${category}
+    return '''
+    value-
+    category : ${category}
     item_label : ${itemLabel}
     title : ${title}
     pickUpAddress : ${pickUpAddress}
     pickUpDate : ${pickUpDate}
     mileage : ${mileage}
-    isDone : ${isDone}''';
+    isDone : ${isDone}\n''';
   }
 }

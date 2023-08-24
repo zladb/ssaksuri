@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../const/item_category_list.dart';
 
 class DataUtils {
@@ -107,5 +109,9 @@ class DataUtils {
       default:
         return 0;
     }
+  }
+
+  static String getDateFormatted({required DateTime pickedDate}){
+    return DateFormat('yyyy-MM-dd').format(pickedDate);
   }
 }

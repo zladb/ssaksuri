@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ssaksuri/const/colors.dart';
+import 'package:ssaksuri/utils/data_utils.dart';
 
 import '../const/basic_text.dart';
 import '../model/request_item_model.dart';
@@ -10,6 +12,13 @@ class MyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Hive.box('info');
+    int id = user.get('id');
+    String nickName = user.get('nickname');
+    int mileage = user.get('mileage');
+    // final data_box = Hive.box<ItemModel>('$id');
+    // print('keys : ${data_box.keys.toList()}');
+    // print('values : ${data_box.values.toList()}');
 
     return SafeArea(
       child: Scaffold(
@@ -40,9 +49,9 @@ class MyPageScreen extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              renderProfile(context),
+              renderProfile(context, nickname: nickName),
               SizedBox(height: 10),
-              renderMileage(context),
+              renderMileage(context, mileage: mileage),
               SizedBox(height: 10),
               Divider(thickness: 1, height: 1, color: lightColor),
               SizedBox(height: 20),
@@ -65,7 +74,7 @@ class MyPageScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10),
-              renderSeparated(),
+              renderSeparated(id: id),
             ],
           ),
         ),
@@ -73,7 +82,7 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 
-  Widget renderProfile(context) {
+  Widget renderProfile(BuildContext context, {required String nickname}) {
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,
@@ -106,7 +115,7 @@ class MyPageScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(style: ts, '안녕하세요,'),
-                  Text(style: ts, '유진님!'),
+                  Text(style: ts, '${nickname}님!'),
                   SizedBox(height: 3),
                   Text(style: ts.copyWith(fontSize: 13), '우리집 주소 - 대구 서구 비산동'),
                 ],
@@ -118,13 +127,7 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 
-  Widget renderMileage(context) {
-    final user = Hive.box('info');
-    int id = user.get('id');
-    final data_box = Hive.box<ItemModel>('$id');
-    print('keys : ${data_box.keys.toList()}');
-    print('values : ${data_box.values.toList()}');
-
+  Widget renderMileage(context, {required mileage}) {
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,
@@ -146,7 +149,7 @@ class MyPageScreen extends StatelessWidget {
                     style: ts,
                   ),
                   Text(
-                    '16,650 M',
+                    '${mileage} M',
                     style: ts,
                   ),
                 ],
@@ -166,43 +169,43 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 
-  Widget renderSeparated() {
-    return Expanded(
-      child: ListView.separated(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              onTap: () {},
-              leading: FlutterLogo(size: 72.0),
-              title: Text('대형 쓰레기'),
-              subtitle: Text('수거일: 2023-08-26\n마일리지: 500 적립'),
-              trailing: Icon(
-                Icons.check,
-                size: 30,
-                color: Colors.green,
-              ),
-              isThreeLine: true,
-
-              //dense: true,
+  Widget renderSeparated({required int id}) {
+    return ValueListenableBuilder(
+      valueListenable: Hive.box<ItemModel>('${id}').listenable(),
+      builder: (context, box, widget){
+        if (box.values.isEmpty) {
+          return Scaffold(
+            body: Center(
+              child: Text('수거 요청 기록이 없습니다.'),
             ),
           );
-          // return Container(
-          //   height: 100,
-          //   width: MediaQuery.of(context).size.width,
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     borderRadius: BorderRadius.all(Radius.circular(15)),
-          //   ),
-          //   child: Text('$index'),
-          // );
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(
-            height: 10,
-          );
-        },
-      ),
+        }
+        return Expanded(
+          child: ListView.separated(
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  onTap: () {},
+                  leading: Image.asset('assets/img/${DataUtils.getENGfromKOR(word: box.get(index)!.itemLabel)}.png'),
+                  title: Text('${box.get(index)!.category}'),
+                  subtitle: Text('수거일: ${DataUtils.getDateFormatted(pickedDate: box.get(index)!.pickUpDate)}\n마일리지: ${box.get(index)!.mileage} 적립'),
+                  trailing: Icon(
+                    Icons.check,
+                    size: 30,
+                    color: box.get(index)!.isDone ? Colors.green : Colors.white,
+                  ),
+                  isThreeLine: true,
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(
+                height: 10,
+              );
+            }, itemCount: box.values.length,
+          ),
+        );
+      },
     );
   }
 }
