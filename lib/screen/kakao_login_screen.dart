@@ -9,14 +9,19 @@ import '../model/kakao_login_fn.dart';
 import '../model/request_item_model.dart';
 
 class KakaoLoginScreen extends StatelessWidget {
-  // late final Future<User?> user;
+  User? user;
 
   void userDbRegister() async {
     get_user_info().then(
       (user) async {
         if (user != null) {
+          this.user = user;
           // 회원번호로 box를 연다.
           await Hive.openBox<ItemModel>('${user?.id}');
+          await Hive.openBox('info');
+          final box = Hive.box('info');
+          box.put('id', user.id);
+          box.put('nickname', user.kakaoAccount?.profile?.nickname);
         }
       },
     );
@@ -24,14 +29,14 @@ class KakaoLoginScreen extends StatelessWidget {
 
   void _goToHomeScreen(context) {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const MainPage()),
+      MaterialPageRoute(builder: (context) => const MainPage()),
         (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Container(
+    return Scaffold(
+      body: Container(
         color: darkColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

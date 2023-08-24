@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ssaksuri/const/colors.dart';
 import 'package:ssaksuri/utils/data_utils.dart';
+
+import '../model/request_item_model.dart';
 
 class RequestBottomSheet extends StatefulWidget {
   final String category;
@@ -27,7 +31,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
   Map<String, String> reponse = {};
   DateTime date = DateTime.now();
 
-  final TextEditingController productController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
@@ -42,7 +46,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
-    productController.dispose();
+    titleController.dispose();
     addressController.dispose();
     dateController.dispose();
     super.dispose();
@@ -166,8 +170,9 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    renderTextFiled(label: '제품명', controller: productController),
-                    renderTextFiled(label: '수거 희망 주소', controller: addressController),
+                    renderTextFiled(label: '제품명', controller: titleController),
+                    renderTextFiled(
+                        label: '수거 희망 주소', controller: addressController),
                     renderDateFiled(label: '수거 희망 날짜'),
                     SizedBox(height: 45),
                     renderMileage(context: context),
@@ -182,7 +187,8 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     );
   }
 
-  TextField renderTextFiled({required String label, required TextEditingController controller}) {
+  TextField renderTextFiled(
+      {required String label, required TextEditingController controller}) {
     return TextField(
       controller: controller,
       onChanged: (text) {
@@ -244,12 +250,13 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                     data: ThemeData.dark(), //다크 테마
                     child: child!,
                   );
-                }
-            );
+                });
 
-            if (pickedDate != null){
+            if (pickedDate != null) {
               setState(() {
-                dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                this.date = pickedDate;
+                dateController.text =
+                    DateFormat('yyyy-MM-dd').format(pickedDate);
                 reponse.addAll({label: dateController.text});
                 print(reponse);
               });
@@ -272,11 +279,11 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                 data: ThemeData.dark(), //다크 테마
                 child: child!,
               );
-            }
-        );
+            });
 
-        if (pickedDate != null){
+        if (pickedDate != null) {
           setState(() {
+            this.date = pickedDate;
             dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
             reponse.addAll({label: dateController.text});
             print(reponse);
@@ -289,9 +296,36 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
 
   // TODO 요청하기 누루면 hive에 데이터 저장.
   ElevatedButton renderRequestButton() {
+    final user = Hive.box('info');
+    int id = user.get('id');
+    final data_box = Hive.box<ItemModel>('$id');
+
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context).pop();
+        if (titleController.text == null) {
+          showToast('제품명을 적어주세요.');
+        }
+        else if(addressController.text == null){
+          showToast('주소를 적어주세요.');
+        }
+        else if(date == null){
+          showToast('날짜를 정해주세요.');
+        }
+        else{
+          final ItemModel itemModel = ItemModel(
+            category: widget.category,
+            itemLabel: widget.item_label,
+            title: titleController.text,
+            pickUpAddress: addressController.text,
+            pickUpDate: date,
+            mileage: DataUtils.getMileageFromCategory(category: widget.category),
+            isDone: false,
+          );
+          // DB에 자료 넣음.
+          data_box.add(itemModel);
+          showToast('요청을 완료하였습니다!');
+          Navigator.of(context).pop();
+        }
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith(
@@ -340,7 +374,8 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
             Container(
               child: Center(
                 child: Text(
-                  DataUtils.getMileageFromCategory(category: widget.category).toString(),
+                  DataUtils.getMileageFromCategory(category: widget.category)
+                      .toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
@@ -378,5 +413,14 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
         _pickedImgs = images;
       });
     }
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.white,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+    );
   }
 }

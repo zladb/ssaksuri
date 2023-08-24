@@ -24,16 +24,27 @@ class ItemModel {
   final int mileage; // 마일리지
 
   @HiveField(6)
-  final bool isDone;  // 처리 상태
+  final bool isDone; // 처리 상태
 
-    ItemModel({
-      required this.category,
-      required this.itemLabel,
-      required this.title,
-      required this.pickUpAddress,
-      required this.pickUpDate,
-      required this.mileage,
-      required this.isDone,
+  ItemModel({
+    required this.category,
+    required this.itemLabel,
+    required this.title,
+    required this.pickUpAddress,
+    required this.pickUpDate,
+    required this.mileage,
+    required this.isDone,
   });
 
+  @override
+  String toString() {
+    // TODO: implement toString
+    return '''category : ${category}
+    item_label : ${itemLabel}
+    title : ${title}
+    pickUpAddress : ${pickUpAddress}
+    pickUpDate : ${pickUpDate}
+    mileage : ${mileage}
+    isDone : ${isDone}''';
+  }
 }

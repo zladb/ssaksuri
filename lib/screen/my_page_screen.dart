@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ssaksuri/const/colors.dart';
 
 import '../const/basic_text.dart';
+import '../model/request_item_model.dart';
 
 class MyPageScreen extends StatelessWidget {
   MyPageScreen({super.key});
@@ -117,6 +119,12 @@ class MyPageScreen extends StatelessWidget {
   }
 
   Widget renderMileage(context) {
+    final user = Hive.box('info');
+    int id = user.get('id');
+    final data_box = Hive.box<ItemModel>('$id');
+    print('keys : ${data_box.keys.toList()}');
+    print('values : ${data_box.values.toList()}');
+
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,
