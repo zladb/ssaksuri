@@ -1,13 +1,81 @@
 import 'package:flutter/material.dart';
 
+import '../const/basic_text.dart';
+import '../const/colors.dart';
+
 class GarbageCollectionInfoScreen extends StatelessWidget {
   const GarbageCollectionInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('쓰레기 수거 정보 스크린'),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            '쓰레기 배출 요일 안내',
+            style: ts,
+          ),
+          backgroundColor: darkColor,
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.notifications),
+                onPressed: () {
+                  print('shopping cart button is clicked');
+                }),
+            IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  print('search button is clicked');
+                }),
+          ],
+        ),
+        backgroundColor: darkColor,
+        body: Container(
+          margin: EdgeInsets.only(top: 50),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text('우리집 주소', style: ts.copyWith(color: Colors.black)),
+                Text('대구 서구 비산동', style: ts.copyWith(fontSize: 30, color: Colors.black)),
+                SizedBox(height: 10),
+                Container(
+                  color: primaryColor,
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                ),
+                SizedBox(height: 10),
+                Container(
+                  color: primaryColor,
+                  height: 300,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      Text('오늘 배출 쓰레기- 종이', style: ts.copyWith(fontSize: 25, color: Colors.white)),
+                      Container(
+                        color: Colors.white,
+                        height: 250,
+                        width: MediaQuery.of(context).size.width-55,
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text('20:30 수거 예정', style: ts.copyWith(fontSize: 30, color: Colors.black)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
