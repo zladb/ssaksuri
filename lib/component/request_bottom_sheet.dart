@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ssaksuri/const/colors.dart';
+import 'package:ssaksuri/utils/data_utils.dart';
 
 class RequestBottomSheet extends StatefulWidget {
   final String category;
@@ -24,7 +26,10 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
   List<XFile> _pickedImgs = [];
   Map<String, String> reponse = {};
   DateTime date = DateTime.now();
-  final dateController = TextEditingController();
+
+  final TextEditingController productController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +42,8 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
+    productController.dispose();
+    addressController.dispose();
     dateController.dispose();
     super.dispose();
   }
@@ -159,11 +166,11 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    renderTextFiled(label: '제품명'),
-                    renderTextFiled(label: '수거 희망 주소'),
+                    renderTextFiled(label: '제품명', controller: productController),
+                    renderTextFiled(label: '수거 희망 주소', controller: addressController),
                     renderDateFiled(label: '수거 희망 날짜'),
                     SizedBox(height: 45),
-                    renderMileage(context),
+                    renderMileage(context: context),
                   ],
                 ),
               ),
@@ -175,11 +182,13 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     );
   }
 
-  TextField renderTextFiled({required String label}) {
+  TextField renderTextFiled({required String label, required TextEditingController controller}) {
     return TextField(
+      controller: controller,
       onChanged: (text) {
         setState(
           () {
+            controller.text = text;
             reponse.addAll({label: text});
             print(reponse);
           },
@@ -206,7 +215,6 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
         dateController.text = date.toString();
         setState(
           () {
-
             reponse.addAll({label: text});
             print(reponse);
           },
@@ -214,6 +222,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
       },
       cursorColor: primaryColor,
       decoration: InputDecoration(
+        // icon: const Icon(Icons.calendar_today_rounded),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: primaryColor),
         ),
@@ -224,29 +233,57 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
         labelStyle: TextStyle(color: Colors.black87),
         suffixIcon: IconButton(
           onPressed: () async {
-            final selectedDate = await showDatePicker(
-              context: context,
-              initialDate: date,
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: ThemeData.dark(), //다크 테마
-                  child: child!,
-                );
-              },
+            FocusManager.instance.primaryFocus?.unfocus();
+            DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: date,
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+                builder: (BuildContext context, Widget? child) {
+                  return Theme(
+                    data: ThemeData.dark(), //다크 테마
+                    child: child!,
+                  );
+                }
             );
-            if (selectedDate != null) {
+
+            if (pickedDate != null){
               setState(() {
-                date = selectedDate;
+                dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                reponse.addAll({label: dateController.text});
+                print(reponse);
               });
             }
-            print('{$date.year}');
+            FocusManager.instance.primaryFocus?.unfocus();
           },
           icon: Icon(Icons.calendar_month),
         ),
         suffixIconColor: primaryColor,
       ),
+      onTap: () async {
+        FocusManager.instance.primaryFocus?.unfocus();
+        DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: date,
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2101),
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.dark(), //다크 테마
+                child: child!,
+              );
+            }
+        );
+
+        if (pickedDate != null){
+          setState(() {
+            dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+            reponse.addAll({label: dateController.text});
+            print(reponse);
+          });
+        }
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
     );
   }
 
@@ -277,7 +314,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     );
   }
 
-  Widget renderMileage(context) {
+  Widget renderMileage({context}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -302,7 +339,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
             Container(
               child: Center(
                 child: Text(
-                  '5,000',
+                  DataUtils.getMileageFromCategory(category: widget.category).toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
@@ -341,5 +378,4 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
       });
     }
   }
-
 }

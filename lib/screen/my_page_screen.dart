@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ssaksuri/const/colors.dart';
 
+import '../const/basic_text.dart';
+
 class MyPageScreen extends StatelessWidget {
   MyPageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextStyle ts = TextStyle(
-      fontWeight: FontWeight.w700,
-      fontSize: 20,
-      color: Colors.white,
-    );
 
     return SafeArea(
       child: Scaffold(
@@ -23,7 +20,7 @@ class MyPageScreen extends StatelessWidget {
           elevation: 0,
           actions: <Widget>[
             IconButton(
-                icon: Icon(Icons.alarm),
+                icon: Icon(Icons.notifications),
                 onPressed: () {
                   print('shopping cart button is clicked');
                 }),
@@ -41,9 +38,9 @@ class MyPageScreen extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              renderProfile(context, ts),
+              renderProfile(context),
               SizedBox(height: 10),
-              renderMileage(context, ts),
+              renderMileage(context),
               SizedBox(height: 10),
               Divider(thickness: 1, height: 1, color: lightColor),
               SizedBox(height: 20),
@@ -74,7 +71,7 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 
-  Widget renderProfile(context, TextStyle ts) {
+  Widget renderProfile(context) {
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,
@@ -119,7 +116,7 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 
-  Widget renderMileage(context, TextStyle ts) {
+  Widget renderMileage(context) {
     return Container(
       height: 100,
       width: MediaQuery.of(context).size.width,

@@ -88,4 +88,24 @@ class DataUtils {
         return ['null'];
     }
   }
+
+  static int getMileageFromCategory({required String category}){
+    switch (category) {
+    // 가구류
+      case '가구류':
+        return 1200;
+
+      case '대형 전자제품류':
+        return 1500;
+
+      case '소형 전자제품류':
+        return 700;
+
+      case '생활용품류':
+        return 500;
+
+      default:
+        return 0;
+    }
+  }
 }
