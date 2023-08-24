@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ssaksuri/screen/home_screen.dart';
 
 import '../const/colors.dart';
 import '../mainpage.dart';
+import '../model/kakao_login_fn.dart';
+import '../model/request_item_model.dart';
 
 class KakaoLoginScreen extends StatelessWidget {
-  void _get_user_info() async {
-    try {
-      User user = await UserApi.instance.me();
-      print('사용자 정보 요청 성공'
-          '\n회원번호: ${user.id}'
-          '\n닉네임: ${user.kakaoAccount?.profile?.nickname}');
-    } catch (error) {
-      print('사용자 정보 요청 실패 $error');
-    }
+  // late final Future<User?> user;
+
+  void userDbRegister() async {
+    get_user_info().then(
+      (user) async {
+        if (user != null) {
+          // 회원번호로 box를 연다.
+          await Hive.openBox<ItemModel>('${user?.id}');
+        }
+      },
+    );
+  }
+
+  void _goToHomeScreen(context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const MainPage()),
+        (route) => false);
   }
 
   @override
@@ -31,7 +42,7 @@ class KakaoLoginScreen extends StatelessWidget {
               height: 200,
               width: 200,
             ),
-            DefaultTextStyle(
+            const DefaultTextStyle(
               style: TextStyle(
                 fontSize: 45,
                 fontWeight: FontWeight.w700,
@@ -40,9 +51,7 @@ class KakaoLoginScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               child: Text('싹쓰리'),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             GestureDetector(
               onTap: () async {
                 print(await KakaoSdk.origin);
@@ -50,14 +59,18 @@ class KakaoLoginScreen extends StatelessWidget {
                   try {
                     await UserApi.instance.loginWithKakaoTalk();
                     print('카카오톡으로 로그인 성공');
-                    _get_user_info();
+                    get_user_info();
+                    userDbRegister();
+                    _goToHomeScreen(context);
                   } catch (error) {
                     print('카카오톡으로 로그인 실패 $error');
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
                     try {
                       await UserApi.instance.loginWithKakaoAccount();
                       print('카카오계정으로 로그인 성공');
-                      _get_user_info();
+                      get_user_info();
+                      userDbRegister();
+                      _goToHomeScreen(context);
                     } catch (error) {
                       print('카카오계정으로 로그인 실패 $error');
                     }
@@ -66,9 +79,9 @@ class KakaoLoginScreen extends StatelessWidget {
                   try {
                     await UserApi.instance.loginWithKakaoAccount();
                     print('카카오계정으로 로그인 성공');
-                    _get_user_info();
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                        builder: (context) => const MainPage()), (route) => false);
+                    get_user_info();
+                    userDbRegister();
+                    _goToHomeScreen(context);
                   } catch (error) {
                     print('카카오계정으로 로그인 실패 $error');
                   }
