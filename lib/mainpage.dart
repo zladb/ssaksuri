@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ssaksuri/screen/garbage_collection_info_screen.dart';
 import 'package:ssaksuri/screen/garbage_collection_request_screen.dart';
 import 'package:ssaksuri/screen/home_screen.dart';
@@ -7,13 +8,14 @@ import 'package:ssaksuri/screen/my_page_screen.dart';
 import 'const/tabs.dart';
 
 class MainPage extends StatefulWidget {
+  // final User? user;
   const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late final TabController controller;
 
   @override
@@ -22,7 +24,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
     super.initState();
 
     controller = TabController(length: TABS.length, vsync: this);
-    controller.addListener(() { // 컨트롤의 상태가 변경될 때 마다 rebuild
+    controller.addListener(() {
+      // 컨트롤의 상태가 변경될 때 마다 rebuild
       setState(() {});
     });
   }
@@ -46,18 +49,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
         showUnselectedLabels: true,
         currentIndex: controller.index,
         type: BottomNavigationBarType.fixed,
-        onTap: (index){
+        onTap: (index) {
           controller.animateTo(index);
         },
         items: TABS
             .map(
               (e) => BottomNavigationBarItem(
-            icon: Icon(
-              e.icon,
-            ),
-            label: e.label,
-          ),
-        )
+                icon: Icon(
+                  e.icon,
+                ),
+                label: e.label,
+              ),
+            )
             .toList(),
       ),
     );

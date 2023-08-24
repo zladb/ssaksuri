@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ssaksuri/const/colors.dart';
 import 'package:ssaksuri/utils/data_utils.dart';
+
+import '../model/request_item_model.dart';
 
 class RequestBottomSheet extends StatefulWidget {
   final String category;
@@ -25,9 +29,10 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
   Map<String, String> reponse = {};
-  DateTime date = DateTime.now();
+  DateTime? date;
+  bool isDone = false;
 
-  final TextEditingController productController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
 
@@ -42,7 +47,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
-    productController.dispose();
+    titleController.dispose();
     addressController.dispose();
     dateController.dispose();
     super.dispose();
@@ -50,6 +55,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    // dateController.text = DateFormat('yyyy-MM-dd').format(date);
     List<Widget> _boxContents = [
       IconButton(
         onPressed: () {
@@ -166,8 +172,9 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    renderTextFiled(label: '제품명', controller: productController),
-                    renderTextFiled(label: '수거 희망 주소', controller: addressController),
+                    renderTextFiled(label: '제품명', controller: titleController),
+                    renderTextFiled(
+                        label: '수거 희망 주소', controller: addressController),
                     renderDateFiled(label: '수거 희망 날짜'),
                     SizedBox(height: 45),
                     renderMileage(context: context),
@@ -182,7 +189,8 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     );
   }
 
-  TextField renderTextFiled({required String label, required TextEditingController controller}) {
+  TextField renderTextFiled(
+      {required String label, required TextEditingController controller}) {
     return TextField(
       controller: controller,
       onChanged: (text) {
@@ -208,7 +216,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     );
   }
 
-  TextField renderDateFiled({required String label}) {
+  TextField renderDateFiled({required String label,}) {
     return TextField(
       controller: dateController,
       onChanged: (text) {
@@ -236,7 +244,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
             FocusManager.instance.primaryFocus?.unfocus();
             DateTime? pickedDate = await showDatePicker(
                 context: context,
-                initialDate: date,
+                initialDate: DateTime.now(),
                 firstDate: DateTime(2000),
                 lastDate: DateTime(2101),
                 builder: (BuildContext context, Widget? child) {
@@ -244,12 +252,21 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                     data: ThemeData.dark(), //다크 테마
                     child: child!,
                   );
-                }
-            );
+                });
 
-            if (pickedDate != null){
+            // TODO 구현하기
+            if (pickedDate != null) {
               setState(() {
-                dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                date = pickedDate;
+                if (date!.compareTo(DateTime.now()) >= 1) {
+                  print("과거 또는 현재");
+                  isDone = true;
+                } else {
+                  print("미래");
+                  isDone = false;
+                }
+                dateController.text =
+                    DataUtils.getDateFormatted(pickedDate: pickedDate);
                 reponse.addAll({label: dateController.text});
                 print(reponse);
               });
@@ -264,7 +281,7 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
         FocusManager.instance.primaryFocus?.unfocus();
         DateTime? pickedDate = await showDatePicker(
             context: context,
-            initialDate: date,
+            initialDate: DateTime.now(),
             firstDate: DateTime(2000),
             lastDate: DateTime(2101),
             builder: (BuildContext context, Widget? child) {
@@ -272,12 +289,20 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
                 data: ThemeData.dark(), //다크 테마
                 child: child!,
               );
-            }
-        );
+            });
 
-        if (pickedDate != null){
+        if (pickedDate != null) {
           setState(() {
-            dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+            date = pickedDate;
+            if (date!.compareTo(DateTime.now()) >= 0) {
+              print("현재 또는 미래");
+              isDone = false;
+            } else {
+              print("과거");
+              isDone = true;
+            }
+            dateController.text =
+                DataUtils.getDateFormatted(pickedDate: pickedDate);
             reponse.addAll({label: dateController.text});
             print(reponse);
           });
@@ -287,10 +312,44 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
     );
   }
 
+  // TODO 요청하기 누루면 hive에 데이터 저장.
   ElevatedButton renderRequestButton() {
+    final user = Hive.box('info');
+    int id = user.get('id');
+    final data_box = Hive.box<ItemModel>('$id');
+
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context).pop();
+        if (titleController.text == '') {
+          showToast('제품명을 적어주세요.');
+          print('제품명을 적어주세요.');
+        } else if (addressController.text == '') {
+          showToast('주소를 적어주세요.');
+          print('주소를 적어주세요.');
+        } else if (date == null) {
+          showToast('날짜를 정해주세요.');
+          print('날짜를 적어주세요.');
+        } else {
+          int mileage = DataUtils.getMileageFromCategory(category: widget.category);
+          final ItemModel itemModel = ItemModel(
+            category: widget.category,
+            itemLabel: widget.item_label,
+            title: titleController.text,
+            pickUpAddress: addressController.text,
+            pickUpDate: date!,
+            mileage:mileage,
+            isDone: isDone,
+          );
+          // DB에 자료 넣음.
+          data_box.add(itemModel);
+
+          if(isDone){
+            user.put('mileage', user.get('mileage')+mileage);
+            print('누적 mileage 값 : ${user.get('mileage')}');
+          }
+          showToast('요청을 완료하였습니다!');
+          Navigator.of(context).pop();
+        }
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith(
@@ -339,7 +398,8 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
             Container(
               child: Center(
                 child: Text(
-                  DataUtils.getMileageFromCategory(category: widget.category).toString(),
+                  DataUtils.getMileageFromCategory(category: widget.category)
+                      .toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
@@ -377,5 +437,17 @@ class _RequestBottomSheetState extends State<RequestBottomSheet> {
         _pickedImgs = images;
       });
     }
+  }
+
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        backgroundColor: Colors.white,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1, //ios및웹용 시간
+        textColor: Colors.black, //글자색
+        fontSize: 16.0 //폰트사이즈
+        );
   }
 }
