@@ -2,7 +2,8 @@
     <application
         android:label="ssaksuri"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"> <!--kakao map-->
 
         <activity
             android:name=".MainActivity"
@@ -50,5 +51,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.naver.maps.map.p3gvx5azub"
+            android:value="p3gvx5azub" />
     </application>
 </manifest>
