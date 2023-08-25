@@ -46,6 +46,7 @@ dependencies:
   fluttertoast: ^8.2.2
   flutter_naver_map: ^1.0.0 #naver
   daum_postcode_search: ^0.0.2 #kakao map
+  http: ^1.1.0
 
 
 dev_dependencies:

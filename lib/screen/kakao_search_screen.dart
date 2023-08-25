@@ -1,18 +1,27 @@
+import 'dart:convert';
+
 import 'package:daum_postcode_search/daum_postcode_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:http/http.dart' as http;
 
 import 'kakao_postcod_screen.dart';
 
-// Future<String> loadLatLng() async {
-//   // 좌표로 주소 구하기
-//   String gpsUrl =
-//       'https://maps.googleapis.com/maps/api/geocode/json?address="__________"&key=AIzaSyAji6aWPEUHHeeqh2B5mLXqXPrM2QE58qU';
-//
-//   final responseGps = await http.get(Uri.parse(gpsUrl));
-//
-//   print(convert.jsonDecode(responseGps.body));
-// }
+Future<NLatLng> loadLatLng(String address) async {
+  // 좌표로 주소 구하기
+  String gpsUrl =
+      'https://maps.googleapis.com/maps/api/geocode/json?address='+address+'&key=AIzaSyAji6aWPEUHHeeqh2B5mLXqXPrM2QE58qU';
+
+  final responseGps = await http.get(Uri.parse(gpsUrl));
+
+  double lat = jsonDecode(responseGps.body)['results'][0]['geometry']['location'][0];
+  double lng = jsonDecode(responseGps.body)['results'][0]['geometry']['location'][1];
+  print("위도 확인");
+  print(lat);
+  return NLatLng(lat, lng);
+
+}
 
 class SearchPostcodeScreen extends StatefulWidget {
   const SearchPostcodeScreen({super.key});
@@ -28,6 +37,7 @@ class _SearchPostcodeScreenState
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -37,7 +47,10 @@ class _SearchPostcodeScreenState
               if (_dataModel != null) ...[
                 _text("Road Address", _dataModel!.roadAddress),
                 _text("Zonecode", _dataModel!.zonecode),
-              ],
+                //TODO : localDB에 lat, lng 저장하기
+                loadLatLng(_dataModel!.roadAddress).then((value) => );
+
+    ],
             ],
           ),
         ),
@@ -67,7 +80,7 @@ class _SearchPostcodeScreenState
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Center(
                   child: Text(
-                    "주소를 입력해주세요",
+                    "쓰레기 버리는 위치 설정하기",
                     style: TextStyle(
                         color: Color.fromRGBO(41, 41, 41, 1),
                         fontSize: 18,
@@ -81,6 +94,7 @@ class _SearchPostcodeScreenState
       ],
     );
   }
+
 
   Padding _text(String title, String expain) {
     return Padding(

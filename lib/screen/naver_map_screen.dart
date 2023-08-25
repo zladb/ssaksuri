@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:ssaksuri/const/colors.dart';
 
+import 'kakao_search_screen.dart';
+
 // void main() async {
 //   await _initialize();
 //   runApp(const NaverMapApp());
@@ -19,14 +21,17 @@ import 'package:ssaksuri/const/colors.dart';
 class NaverMapApp extends StatelessWidget {
   final double lat =0.0;
   final double lng=0.0;
+  final NLatLng destination;
   // final int? testId;
   //
   // const NaverMapApp({super.key, this.testId});
-
+  const NaverMapApp({super.key, required this.destination});
 
   @override
   Widget build(BuildContext context) {
-    NLatLng destination = NLatLng(35.8852, 128.6117);
+    //TODO : localDB에있는 lat, lng 꺼내오기
+    NLatLng destination = NLatLng(lat, lng);
+
     final marker = NMarker(id: '1', position: destination, iconTintColor: primaryColor);
     return Scaffold(
       body: NaverMap(
