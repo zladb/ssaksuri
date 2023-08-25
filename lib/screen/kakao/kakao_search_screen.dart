@@ -7,8 +7,8 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import '../utils/adress_utils.dart';
-import 'kakao_postcod_screen.dart';
+import '../../utils/adress_utils.dart';
+
 
 class SearchPostcodeScreen extends StatefulWidget {
   const SearchPostcodeScreen({super.key});

@@ -5,7 +5,7 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ssaksuri/const/colors.dart';
 
-import 'kakao_search_screen.dart';
+import '../kakao/kakao_search_screen.dart';
 
 // void main() async {
 //   await _initialize();

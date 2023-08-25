@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ssaksuri/component/week_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../component/day_info.dart';
-import '../const/basic_text.dart';
-import '../const/colors.dart';
-import 'kakao/kakao_search_screen.dart';
-import 'naver/naver_map_screen.dart';
 
-class GarbageCollectionInfoScreen extends StatelessWidget {
-  const GarbageCollectionInfoScreen({super.key});
+import '../../const/basic_text.dart';
+import '../../const/colors.dart';
+import '../naver/naver_map_screen.dart';
+
+
+class GarbageCollectionInfoBizScreen extends StatelessWidget {
+  const GarbageCollectionInfoBizScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            '쓰레기 배출 요일 안내',
+            '쓰레기 배출 스케줄 안내',
             style: ts,
           ),
           backgroundColor: darkColor,
@@ -60,7 +60,7 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('우리집 주소', style: ts.copyWith(color: Colors.black)),
+                        Text('우리 업체 주소', style: ts.copyWith(color: Colors.black)),
                         Text('${value.get('road_address')}',
                             style: ts.copyWith(fontSize: 30, color: Colors.black)),
                       ],
@@ -71,28 +71,7 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                 Container(
                   height: 100,
                   width: MediaQuery.of(context).size.width,
-                  child: WeekInfo(isBiz: false,),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/img/paper.png',
-                      height: 70,
-                      width: 70,
-                    ),
-                    Image.asset(
-                      'assets/img/glass-bottle.png',
-                      height: 70,
-                      width: 70,
-                    ),
-                    Image.asset(
-                      'assets/img/plastic.png',
-                      height: 70,
-                      width: 70,
-                    ),
-                  ],
+                  child: WeekInfo(isBiz: true,),
                 ),
                 SizedBox(height: 10),
                 Container(
@@ -103,9 +82,9 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
-                      Text('쓰레기 수거 동선',
+                      Text('쓰레기 수거 포인트',
                           style:
-                              ts.copyWith(fontSize: 25, color: Colors.white)),
+                          ts.copyWith(fontSize: 25, color: Colors.white)),
                       Container(
                         color: Colors.white,
                         width: MediaQuery.of(context).size.width - 55,
@@ -116,8 +95,8 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text('20:30 수거 예정',
-                    style: ts.copyWith(fontSize: 30, color: Colors.black)),
+                Text('13:30 수거 예정입니다.',
+                    style: ts.copyWith(fontSize: 25, color: Colors.black)),
               ],
             ),
           ),

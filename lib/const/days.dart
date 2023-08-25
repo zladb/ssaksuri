@@ -18,3 +18,14 @@ final Map<String,List<String>> day_trash_info = {
   '금' : [],
   '토' : [],
 };
+
+
+final Map<String, bool> day_trash_biz_info = {
+  '일' : true,
+  '월': false,
+  '화' : true,
+  '수' : false,
+  '목' : true,
+  '금' : false,
+  '토' : false,
+};

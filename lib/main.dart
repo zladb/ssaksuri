@@ -3,7 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ssaksuri/model/request_item_model.dart';
 import 'package:ssaksuri/screen/home_screen.dart';
-import 'package:ssaksuri/screen/kakao_login_screen.dart';
+import 'package:ssaksuri/screen/kakao/kakao_login_screen.dart';
+
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 import 'mainpage.dart';

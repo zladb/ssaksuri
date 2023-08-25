@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:ssaksuri/const/colors.dart';
+import 'package:ssaksuri/main_biz_page.dart';
+
+import '../mainpage.dart';
+import '../screen/home_screen.dart';
 
 class MainAppBar extends StatelessWidget {
   final String mainText;
   final String subText;
+  final bool isBiz;
 
-  MainAppBar({required this.mainText, required this.subText, super.key});
+  MainAppBar({required this.mainText, required this.subText, required this.isBiz,super.key});
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.work),
+          tooltip: 'Add new entry',
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => isBiz ? MainPage(): MainBusinessPage()),
+                    (route) => false);
+          },
+        ),
+      ],
       backgroundColor: darkColor,
       // pinned: true,
       centerTitle: true,
@@ -51,7 +67,7 @@ class MainAppBar extends StatelessWidget {
                   //   status.imagePath,
                   //   height: MediaQuery.of(context).size.width / 2,
                   // ),
-                  Image.asset('assets/img/cute_bear_cutting.png')
+                  isBiz ? Image.asset('assets/img/wink_bear_cutting.png') : Image.asset('assets/img/cute_bear_cutting.png')
                 ],
               ),
             ),
