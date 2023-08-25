@@ -195,7 +195,7 @@ class MyPageScreen extends StatelessWidget {
                   onTap: () {},
                   leading: Image.asset('assets/img/${DataUtils.getENGfromKOR(word: reversed_data[index].itemLabel)}.png'),
                   title: Text(reversed_data[index].category),
-                  subtitle: Text('수거일: ${DataUtils.getDateFormatted(pickedDate: reversed_data[index].pickUpDate)}\n마일리지: ${box.get(index)!.mileage} 적립'),
+                  subtitle: Text('수거일: ${DataUtils.getDateFormatted(pickedDate: reversed_data[index].pickUpDate)}\n마일리지: ${reversed_data[index].mileage} 적립'),
                   trailing: Icon(
                     Icons.check,
                     size: 30,

@@ -29,8 +29,8 @@ void main() async {
       theme: ThemeData(
         fontFamily: 'KimjungchulGothic',
       ),
-      home: MainPage(),
-      //home: KakaoLoginScreen(),
+      // home: MainPage(),
+      home: KakaoLoginScreen(),
     ),
   );
 }

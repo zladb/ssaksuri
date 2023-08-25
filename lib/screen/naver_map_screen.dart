@@ -21,11 +21,11 @@ import 'kakao_search_screen.dart';
 class NaverMapApp extends StatelessWidget {
   final double lat =0.0;
   final double lng=0.0;
-  final NLatLng destination;
+  // final NLatLng destination;
   // final int? testId;
   //
   // const NaverMapApp({super.key, this.testId});
-  const NaverMapApp({super.key, required this.destination});
+  // const NaverMapApp({super.key, required this.destination});
 
   @override
   Widget build(BuildContext context) {

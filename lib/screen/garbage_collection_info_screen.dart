@@ -63,9 +63,21 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset('assets/img/paper.png', height: 70, width: 70,),
-                    Image.asset('assets/img/glass-bottle.png', height: 70, width: 70,),
-                    Image.asset('assets/img/plastic.png',height: 70, width: 70,),
+                    Image.asset(
+                      'assets/img/paper.png',
+                      height: 70,
+                      width: 70,
+                    ),
+                    Image.asset(
+                      'assets/img/glass-bottle.png',
+                      height: 70,
+                      width: 70,
+                    ),
+                    Image.asset(
+                      'assets/img/plastic.png',
+                      height: 70,
+                      width: 70,
+                    ),
                   ],
                 ),
                 SizedBox(height: 10),
@@ -80,26 +92,17 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                               ts.copyWith(fontSize: 25, color: Colors.white)),
                       Container(
                         color: Colors.white,
-<<<<<<< HEAD
-                        width: MediaQuery.of(context).size.width-55,
-                        height: 200,
-                        child:(
-                        SingleChildScrollView(
-                          child:Column(
-                            children: [
-                              SizedBox(height: 100,child: SearchPostcodeScreen()),
-                              SizedBox(height: 150, child: NaverMapApp()),
-                            ],
-                          )
-                        )
-                        )
-                        // height: 250,
-                        //child:
-=======
-                        height: 230,
                         width: MediaQuery.of(context).size.width - 55,
->>>>>>> upstream/main
-                      )
+                        height: 230,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 150, child: NaverMapApp()),
+                              SizedBox(height: 150, child: SearchPostcodeScreen()),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
