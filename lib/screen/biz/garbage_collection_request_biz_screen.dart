@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ssaksuri/container/category_card.dart';
 
-import '../component/request_bottom_sheet.dart';
-import '../const/basic_text.dart';
-import '../const/colors.dart';
-import 'naver/naver_map_screen.dart';
+import '../../component/request_bottom_sheet.dart';
+import '../../const/basic_text.dart';
+import '../../const/colors.dart';
+import '../naver/naver_map_screen.dart';
 
-class GarbageCollectionRequestScreen extends StatelessWidget {
-  const GarbageCollectionRequestScreen({super.key});
+class GarbageCollectionRequestBizScreen extends StatelessWidget {
+  const GarbageCollectionRequestBizScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class GarbageCollectionRequestScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            '우리집 쓰레기 수거 요청',
+            '우리 업체 쓰레기 수거 요청',
             style: ts,
           ),
           backgroundColor: darkColor,
@@ -57,7 +57,7 @@ class GarbageCollectionRequestScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '일반 쓰레기',
+                      '쓰레기 정보 입력',
                       style: ts.copyWith(color: Colors.black),
                     ),
                     SizedBox(
@@ -102,25 +102,36 @@ class GarbageCollectionRequestScreen extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(16))),
                       child: NaverMapApp(),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '관심 수거 업체 선정',
+                      style: ts.copyWith(color: Colors.black),
+                    ),
+                    Container(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(primaryColor),
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        '수거 요청하기',
+                      ),
+                    ),
                   ],
                 ),
               ),
               Expanded(
-                child: Column(
-                  children: [
-                    CategoryCard(
-                      category: '재활용쓰레기',
-                      isTop: true,
-                      isRecycle: true,
-                    ),
-                    Text(
-                      '모아서 배출하고 마일리지를 적립 받으세요!',
-                      style: ts.copyWith(
-                        color: primaryColor,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Container(),
                 ),
               ),
             ],

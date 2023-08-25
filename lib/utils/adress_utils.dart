@@ -7,7 +7,9 @@ import 'package:daum_postcode_search/daum_postcode_search.dart';
 
 import 'package:flutter/material.dart';
 
-import '../screen/kakao_postcod_screen.dart';
+import '../screen/kakao/kakao_postcod_screen.dart';
+
+
 
 class AddressUtils {
   // 도로명 주소로부터 경도 위도를 받아오고, db에 저장하는 함수.

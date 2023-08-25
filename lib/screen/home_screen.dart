@@ -5,7 +5,9 @@ import '../component/main_app_bar.dart';
 import '../container/category_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class HomeScreen extends StatelessWidget {
           MainAppBar(
             mainText: '버리기 곤란한 쓰레기!',
             subText: '싹쓰리로 처리하세요.',
-
+            isBiz: false,
           ),
           SliverToBoxAdapter(
             child: Column(

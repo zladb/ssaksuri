@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ssaksuri/const/colors.dart';
 
+import '../const/days.dart';
+
 class DayInfo extends StatelessWidget {
   final String day;
   final List<String> day_trash_info_list;
+  final bool isBiz;
   const DayInfo({
     required this.day,
     required this.day_trash_info_list,
+    required this.isBiz,
     super.key,
   });
 
@@ -44,7 +48,7 @@ class DayInfo extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: day_trash_info_list
+              children: isBiz? [] : day_trash_info_list
                   .map(
                     (e) => Text(e, style: ts, textAlign: TextAlign.center,),
                   )
