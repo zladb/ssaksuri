@@ -174,9 +174,9 @@ class MyPageScreen extends StatelessWidget {
       valueListenable: Hive.box<ItemModel>('${id}').listenable(),
       builder: (context, box, widget){
         if (box.values.isEmpty) {
-          return Scaffold(
-            body: Center(
-              child: Text('수거 요청 기록이 없습니다.'),
+          return Container(
+            height: MediaQuery.of(context).size.height/3,
+            child: Center(child: Text('수거 요청 내역이 없습니다.', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.white,),),
             ),
           );
         }
