@@ -66,6 +66,19 @@ class DataUtils {
       case '후라이팬':
         return 'frying-pan';
 
+      // 재활용쓰레기
+      case '플라스틱':
+        return 'plastic';
+
+      case '종이':
+        return 'paper';
+
+      case '비닐':
+        return 'bag';
+
+      case '병':
+        return 'glass-bottle';
+
       default:
         return 'null';
     }
@@ -85,6 +98,9 @@ class DataUtils {
 
       case '생활용품류':
         return item_labels_dairy;
+
+      case '재활용쓰레기':
+        return item_labels_recycle;
 
       default:
         return ['null'];
