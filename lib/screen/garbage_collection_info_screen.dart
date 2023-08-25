@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../const/basic_text.dart';
 import '../const/colors.dart';
+import 'kakao_search_screen.dart';
+import 'naver_map_screen.dart';
 
 class GarbageCollectionInfoScreen extends StatelessWidget {
   const GarbageCollectionInfoScreen({super.key});
@@ -64,8 +66,20 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                       Text('오늘 배출 쓰레기- 종이', style: ts.copyWith(fontSize: 25, color: Colors.white)),
                       Container(
                         color: Colors.white,
-                        height: 250,
                         width: MediaQuery.of(context).size.width-55,
+                        height: 200,
+                        child:(
+                        SingleChildScrollView(
+                          child:Column(
+                            children: [
+                              SizedBox(height: 100,child: SearchPostcodeScreen()),
+                              SizedBox(height: 150, child: NaverMapApp()),
+                            ],
+                          )
+                        )
+                        )
+                        // height: 250,
+                        //child:
                       )
                     ],
                   ),
