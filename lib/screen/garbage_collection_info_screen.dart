@@ -57,19 +57,28 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: WeekInfo(),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/img/paper.png', height: 70, width: 70,),
+                    Image.asset('assets/img/glass-bottle.png', height: 70, width: 70,),
+                    Image.asset('assets/img/plastic.png',height: 70, width: 70,),
+                  ],
+                ),
                 SizedBox(height: 10),
                 Container(
                   color: primaryColor,
-                  height: 300,
+                  height: 280,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
-                      Text('오늘 배출 쓰레기- 종이',
+                      Text('쓰레기 수거 동선',
                           style:
                               ts.copyWith(fontSize: 25, color: Colors.white)),
                       Container(
                         color: Colors.white,
-                        height: 250,
+                        height: 230,
                         width: MediaQuery.of(context).size.width - 55,
                       )
                     ],
