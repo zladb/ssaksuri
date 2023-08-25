@@ -170,8 +170,10 @@ class MyPageScreen extends StatelessWidget {
   }
 
   Widget renderSeparated({required int id}) {
+    final data_box = Hive.box<ItemModel>('$id');
+    List<ItemModel> reversed_data = data_box.values.toList().reversed.toList();
     return ValueListenableBuilder(
-      valueListenable: Hive.box<ItemModel>('${id}').listenable(),
+      valueListenable: data_box.listenable(),
       builder: (context, box, widget){
         if (box.values.isEmpty) {
           return Container(
@@ -180,19 +182,24 @@ class MyPageScreen extends StatelessWidget {
             ),
           );
         }
+        else{
+          // print('keys : ${data_box.keys.toList()}');
+
+        }
         return Expanded(
           child: ListView.separated(
             itemBuilder: (context, index) {
+
               return Card(
                 child: ListTile(
                   onTap: () {},
-                  leading: Image.asset('assets/img/${DataUtils.getENGfromKOR(word: box.get(index)!.itemLabel)}.png'),
-                  title: Text('${box.get(index)!.category}'),
-                  subtitle: Text('수거일: ${DataUtils.getDateFormatted(pickedDate: box.get(index)!.pickUpDate)}\n마일리지: ${box.get(index)!.mileage} 적립'),
+                  leading: Image.asset('assets/img/${DataUtils.getENGfromKOR(word: reversed_data[index].itemLabel)}.png'),
+                  title: Text(reversed_data[index].category),
+                  subtitle: Text('수거일: ${DataUtils.getDateFormatted(pickedDate: reversed_data[index].pickUpDate)}\n마일리지: ${box.get(index)!.mileage} 적립'),
                   trailing: Icon(
                     Icons.check,
                     size: 30,
-                    color: box.get(index)!.isDone ? Colors.green : Colors.white,
+                    color: reversed_data[index].isDone ? Colors.green : Colors.white,
                   ),
                   isThreeLine: true,
                 ),

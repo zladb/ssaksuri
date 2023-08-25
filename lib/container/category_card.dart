@@ -4,15 +4,18 @@ import 'package:ssaksuri/utils/data_utils.dart';
 import '../component/category_info.dart';
 import '../component/main_card.dart';
 import '../component/request_bottom_sheet.dart';
+import '../const/basic_text.dart';
 import '../const/colors.dart';
 
 class CategoryCard extends StatelessWidget {
   final String category;
   final bool isTop;
+  final bool isRecycle;
 
   CategoryCard({
     required this.category,
     required this.isTop,
+    required this.isRecycle,
     super.key,
   });
 
@@ -21,8 +24,9 @@ class CategoryCard extends StatelessWidget {
     return SizedBox(
       height: 160,
       child: MainCard(
-        backgroundColor: lightColor,
+        backgroundColor: isRecycle ? Colors.white : lightColor,
         isTop: isTop, // 맨 위에 녀석만 둥근 테두리
+        isRecycle: isRecycle,
         child: LayoutBuilder(builder: (context, constraint) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -30,14 +34,19 @@ class CategoryCard extends StatelessWidget {
               // 카테고리명 (ex) 가구류, 대형 전자제품류, 소형 전자제품류, 생활용품류
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 20),
-                child: Text(
-                  category,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
+                child: isRecycle
+                    ? Text(
+                        category,
+                        style: ts.copyWith(color: Colors.black),
+                      )
+                    : Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
               Expanded(
                 // 물건 image와 label
@@ -78,7 +87,9 @@ class CategoryCard extends StatelessWidget {
                                 imgPath:
                                     'assets/img/${DataUtils.getENGfromKOR(word: e)}.png',
                                 itemLabel: e,
-                                width: constraint.maxWidth / 3,
+                                width: isRecycle
+                                    ? constraint.maxWidth / 4
+                                    : constraint.maxWidth / 3,
                               ),
                             ),
                           )
