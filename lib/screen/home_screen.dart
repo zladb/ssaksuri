@@ -16,6 +16,7 @@ class HomeScreen extends StatelessWidget {
           MainAppBar(
             mainText: '버리기 곤란한 쓰레기!',
             subText: '싹쓰리로 처리하세요.',
+
           ),
           SliverToBoxAdapter(
             child: Column(

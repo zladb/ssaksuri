@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:ssaksuri/container/category_card.dart';
 
 import '../component/request_bottom_sheet.dart';
 import '../const/basic_text.dart';
 import '../const/colors.dart';
+import 'naver_map_screen.dart';
 
 class GarbageCollectionRequestScreen extends StatelessWidget {
   const GarbageCollectionRequestScreen({super.key});
@@ -86,10 +88,20 @@ class GarbageCollectionRequestScreen extends StatelessWidget {
                       height: 10,
                     ),
                     // 맵이 들어갈 컨테이너
+                    Text(
+                      '쓰레기 수거 위치',
+                      style: ts.copyWith(color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       height: 200,
                       width: MediaQuery.of(context).size.width,
-                      color: primaryColor,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(16))
+                      ),
+                      child: NaverMapApp(),
                     ),
                   ],
                 ),
@@ -99,9 +111,6 @@ class GarbageCollectionRequestScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 30,
-                      ),
                       CategoryCard(
                         category: '재활용쓰레기',
                         isTop: true,

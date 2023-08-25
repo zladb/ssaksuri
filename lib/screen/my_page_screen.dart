@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ssaksuri/const/colors.dart';
@@ -6,6 +5,7 @@ import 'package:ssaksuri/utils/data_utils.dart';
 
 import '../const/basic_text.dart';
 import '../model/request_item_model.dart';
+import '../utils/adress_utils.dart';
 
 class MyPageScreen extends StatelessWidget {
   MyPageScreen({super.key});
@@ -16,6 +16,10 @@ class MyPageScreen extends StatelessWidget {
     int id = user.get('id');
     String nickName = user.get('nickname');
     int mileage = user.get('mileage');
+    String road_address = user.get('road_address');
+    String zone_code = user.get('zone_code');
+    print(road_address);
+    print(zone_code);
     // final data_box = Hive.box<ItemModel>('$id');
     // print('keys : ${data_box.keys.toList()}');
     // print('values : ${data_box.values.toList()}');
@@ -49,7 +53,8 @@ class MyPageScreen extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              renderProfile(context, nickname: nickName),
+              renderProfile(context,
+                  nickname: nickName, road_address: road_address),
               SizedBox(height: 10),
               renderMileage(context, mileage: mileage),
               SizedBox(height: 10),
@@ -82,19 +87,20 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 
-  Widget renderProfile(BuildContext context, {required String nickname}) {
+  Widget renderProfile(BuildContext context,
+      {required String nickname, required String road_address}) {
     return Container(
-      height: 100,
+      height: 150,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 22.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -111,13 +117,39 @@ class MyPageScreen extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(style: ts, '안녕하세요,'),
                   Text(style: ts, '${nickname}님!'),
-                  SizedBox(height: 3),
-                  Text(style: ts.copyWith(fontSize: 13), '우리집 주소 - 대구 서구 비산동'),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ValueListenableBuilder(
+                        valueListenable: Hive.box('info').listenable(),
+                        builder: (BuildContext context, Box<dynamic> value,
+                            Widget? child) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('우리집 주소', style: ts.copyWith(fontSize: 12)),
+                              Text('${value.get('road_address')}',
+                                  style: ts.copyWith(fontSize: 15)),
+                            ],
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        color: Colors.white,
+                        iconSize: 25.0,
+                        onPressed: () {
+                          AddressUtils.searchMyAddress(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -140,19 +172,25 @@ class MyPageScreen extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '보유 마일리지',
-                    style: ts,
-                  ),
-                  Text(
-                    '${mileage} M',
-                    style: ts,
-                  ),
-                ],
+              child: ValueListenableBuilder(
+                valueListenable: Hive.box('info').listenable(),
+                builder:
+                    (BuildContext context, Box<dynamic> value, Widget? child) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '보유 마일리지',
+                        style: ts,
+                      ),
+                      Text(
+                        '${value.get('mileage')} M',
+                        style: ts,
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
             IconButton(
@@ -174,32 +212,41 @@ class MyPageScreen extends StatelessWidget {
     List<ItemModel> reversed_data = data_box.values.toList().reversed.toList();
     return ValueListenableBuilder(
       valueListenable: data_box.listenable(),
-      builder: (context, box, widget){
+      builder: (context, box, widget) {
         if (box.values.isEmpty) {
           return Container(
-            height: MediaQuery.of(context).size.height/3,
-            child: Center(child: Text('수거 요청 내역이 없습니다.', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.white,),),
+            height: MediaQuery.of(context).size.height / 3,
+            child: Center(
+              child: Text(
+                '수거 요청 내역이 없습니다.',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
             ),
           );
-        }
-        else{
+        } else {
           // print('keys : ${data_box.keys.toList()}');
-
         }
         return Expanded(
           child: ListView.separated(
             itemBuilder: (context, index) {
-
               return Card(
                 child: ListTile(
                   onTap: () {},
-                  leading: Image.asset('assets/img/${DataUtils.getENGfromKOR(word: reversed_data[index].itemLabel)}.png'),
+                  leading: Image.asset(
+                      'assets/img/${DataUtils.getENGfromKOR(word: reversed_data[index].itemLabel)}.png'),
                   title: Text(reversed_data[index].category),
-                  subtitle: Text('수거일: ${DataUtils.getDateFormatted(pickedDate: reversed_data[index].pickUpDate)}\n마일리지: ${reversed_data[index].mileage} 적립'),
+                  subtitle: Text(
+                      '수거일: ${DataUtils.getDateFormatted(pickedDate: reversed_data[index].pickUpDate)}\n마일리지: ${reversed_data[index].mileage} 적립'),
                   trailing: Icon(
                     Icons.check,
                     size: 30,
-                    color: reversed_data[index].isDone ? Colors.green : Colors.white,
+                    color: reversed_data[index].isDone
+                        ? Colors.green
+                        : Colors.white,
                   ),
                   isThreeLine: true,
                 ),
@@ -209,7 +256,8 @@ class MyPageScreen extends StatelessWidget {
               return SizedBox(
                 height: 10,
               );
-            }, itemCount: box.values.length,
+            },
+            itemCount: box.values.length,
           ),
         );
       },

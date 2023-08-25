@@ -44,28 +44,7 @@ class _SearchPostcodeScreenState extends State<SearchPostcodeScreen> {
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
               child: GestureDetector(
                 onTap: () {
-                  HapticFeedback.mediumImpact();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const KakaoPostcodScreen();
-                      },
-                    ),
-                  ).then(
-                    (value) {
-                      if (value != null) {
-                        setState(
-                          () {
-                            _dataModel = value;
-                            // 도로명주소, 우편번호 db 저장.
-                            user.put('road_address', _dataModel!.roadAddress);
-                            user.put('zone_code', _dataModel!.zonecode);
-                            AddressUtils.getAndSaveLatLogfromRoadAddress(roadAddress: _dataModel!.roadAddress);
-                          },
-                        );
-                      };
-                    },
-                  );
+                  AddressUtils.searchMyAddress(context);
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -101,13 +80,15 @@ class _SearchPostcodeScreenState extends State<SearchPostcodeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-              width: MediaQuery.of(context).size.width * 0.31,
-              child: Center(
-                  child: Text(
+            width: MediaQuery.of(context).size.width * 0.31,
+            child: Center(
+              child: Text(
                 title,
                 style: const TextStyle(
                     fontSize: 12, color: Color.fromRGBO(195, 195, 195, 1)),
-              ))),
+              ),
+            ),
+          ),
           Flexible(
             child: Text(
               expain,

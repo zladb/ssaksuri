@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' show log;
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ssaksuri/const/colors.dart';
 
 import 'kakao_search_screen.dart';
@@ -19,8 +20,9 @@ import 'kakao_search_screen.dart';
 // }
 
 class NaverMapApp extends StatelessWidget {
-  final double lat =0.0;
-  final double lng=0.0;
+
+  final user = Hive.box('info');
+
   // final NLatLng destination;
   // final int? testId;
   //
@@ -29,12 +31,12 @@ class NaverMapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO : localDB에있는 lat, lng 꺼내오기
+    final double lat = user.get('lat');
+    final double lng = user.get('lng');
     NLatLng destination = NLatLng(lat, lng);
 
-    final marker = NMarker(id: '1', position: destination, iconTintColor: primaryColor);
-    return Scaffold(
-      body: NaverMap(
+    final marker = NMarker(id: '1', position: destination,); //iconTintColor
+    return NaverMap(
         options: NaverMapViewOptions(
           initialCameraPosition: NCameraPosition(
               target: destination,
@@ -63,7 +65,6 @@ class NaverMapApp extends StatelessWidget {
         onCameraChange: (position, reason) {},
         onCameraIdle: () {},
         onSelectedIndoorChanged: (indoor) {},
-      ),
-    );
+      );
   }
 }

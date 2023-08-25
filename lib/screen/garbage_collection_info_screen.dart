@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:ssaksuri/component/week_info.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import '../component/day_info.dart';
 import '../const/basic_text.dart';
 import '../const/colors.dart';
@@ -12,6 +13,8 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final user = Hive.box('info');
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -50,9 +53,20 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Text('우리집 주소', style: ts.copyWith(color: Colors.black)),
-                Text('대구 서구 비산동',
-                    style: ts.copyWith(fontSize: 30, color: Colors.black)),
+                ValueListenableBuilder(
+                  valueListenable: Hive.box('info').listenable(),
+                  builder: (BuildContext context, Box<dynamic> value,
+                      Widget? child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('우리집 주소', style: ts.copyWith(color: Colors.black)),
+                        Text('${value.get('road_address')}',
+                            style: ts.copyWith(fontSize: 30, color: Colors.black)),
+                      ],
+                    );
+                  },
+                ),
                 SizedBox(height: 10),
                 Container(
                   height: 100,
@@ -82,7 +96,9 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Container(
-                  color: primaryColor,
+                  decoration: BoxDecoration(
+                      color: primaryColor,
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
                   height: 280,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
@@ -94,14 +110,7 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                         color: Colors.white,
                         width: MediaQuery.of(context).size.width - 55,
                         height: 230,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(height: 150, child: NaverMapApp()),
-                              SizedBox(height: 150, child: SearchPostcodeScreen()),
-                            ],
-                          ),
-                        ),
+                        child: NaverMapApp(),
                       ),
                     ],
                   ),
