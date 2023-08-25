@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ssaksuri/component/week_info.dart';
 
+import '../component/day_info.dart';
 import '../const/basic_text.dart';
 import '../const/colors.dart';
 import 'kakao_search_screen.dart';
@@ -49,23 +51,36 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text('우리집 주소', style: ts.copyWith(color: Colors.black)),
-                Text('대구 서구 비산동', style: ts.copyWith(fontSize: 30, color: Colors.black)),
+                Text('대구 서구 비산동',
+                    style: ts.copyWith(fontSize: 30, color: Colors.black)),
                 SizedBox(height: 10),
                 Container(
-                  color: primaryColor,
                   height: 100,
                   width: MediaQuery.of(context).size.width,
+                  child: WeekInfo(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/img/paper.png', height: 70, width: 70,),
+                    Image.asset('assets/img/glass-bottle.png', height: 70, width: 70,),
+                    Image.asset('assets/img/plastic.png',height: 70, width: 70,),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Container(
                   color: primaryColor,
-                  height: 300,
+                  height: 280,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     children: [
-                      Text('오늘 배출 쓰레기- 종이', style: ts.copyWith(fontSize: 25, color: Colors.white)),
+                      Text('쓰레기 수거 동선',
+                          style:
+                              ts.copyWith(fontSize: 25, color: Colors.white)),
                       Container(
                         color: Colors.white,
+<<<<<<< HEAD
                         width: MediaQuery.of(context).size.width-55,
                         height: 200,
                         child:(
@@ -80,12 +95,17 @@ class GarbageCollectionInfoScreen extends StatelessWidget {
                         )
                         // height: 250,
                         //child:
+=======
+                        height: 230,
+                        width: MediaQuery.of(context).size.width - 55,
+>>>>>>> upstream/main
                       )
                     ],
                   ),
                 ),
                 SizedBox(height: 10),
-                Text('20:30 수거 예정', style: ts.copyWith(fontSize: 30, color: Colors.black)),
+                Text('20:30 수거 예정',
+                    style: ts.copyWith(fontSize: 30, color: Colors.black)),
               ],
             ),
           ),

@@ -37,3 +37,10 @@ final List<String> item_labels_dairy = [
   '후라이팬',
   '기타',
 ];
+
+final List<String> item_labels_recycle = [
+  '플라스틱',
+  '종이',
+  '비닐',
+  '병',
+];
