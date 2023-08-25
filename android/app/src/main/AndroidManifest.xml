@@ -2,7 +2,7 @@
     <application
         android:label="ssaksuri"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:usesCleartextTraffic="true"> <!--kakao map-->
 
         <activity
