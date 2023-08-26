@@ -81,7 +81,7 @@ class MyBizPageScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 10),
-              renderSeparated(id: id),
+              //renderSeparated(id: id),
             ],
           ),
         ),

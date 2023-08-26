@@ -28,7 +28,7 @@ class KakaoLoginScreen extends StatelessWidget {
           box.put('lat', 35.8836825);
           box.put('lng', 128.5941278);
           box.put('road_address', '대구광역시 북구 호암로 51');
-          box.put('zonecode', '41585');
+          box.put('zone_code', '41585');
           print('keys : ${box.keys.toList()}');
           print('values : ${box.values.toList()}');
         }

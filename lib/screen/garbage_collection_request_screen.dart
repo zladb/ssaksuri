@@ -76,7 +76,7 @@ class GarbageCollectionRequestScreen extends StatelessWidget {
                           builder: (_) {
                             // return RequestBottomSheet();
                             return RequestBottomSheet(
-                              category: '이게머지',
+                              category: '일반쓰레기',
                               item_label: '일반 쓰레기!',
                             );
                           },
